@@ -1,0 +1,19 @@
+<!-- luan.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Site Malicioso - POC</title>
+    <style>
+        body { background-color: red; color: white; text-align: center; font-family: Arial; padding: 50px; }
+    </style>
+</head>
+<body>
+    <h1>⚠️ POC de Redirecionamento Aberto ⚠️</h1>
+    <p>Se você está vendo esta página, a vulnerabilidade de redirecionamento aberto foi explorada com sucesso.</p>
+    <p>URL de origem: <span id="origin"></span></p>
+    
+    <script>
+        document.getElementById('origin').textContent = document.referrer || "Não disponível";
+    </script>
+</body>
+</html>
